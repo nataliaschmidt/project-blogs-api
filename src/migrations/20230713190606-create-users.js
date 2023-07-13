@@ -14,8 +14,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      display_name: { type: Sequelize.STRING },
-      email: { type: Sequelize.STRING },
+      display_name: {
+        type: Sequelize.STRING,
+      },
+      email: {
+        type: Sequelize.STRING,
+        unique: true,
+      },
       password: { type: Sequelize.STRING },
       image: { type: Sequelize.STRING },
     });
