@@ -15,6 +15,12 @@ console.log(error);
   return { status: 'CREATED', data: createdCategory.dataValues };
 };
 
+const getAllCategories = async () => {
+  const categories = await Category.findAll();
+  return { status: 'SUCCESSFUL', data: categories };
+};
+
 module.exports = {
   createCategory,
+  getAllCategories,
 };
