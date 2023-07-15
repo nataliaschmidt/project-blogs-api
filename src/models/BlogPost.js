@@ -7,6 +7,7 @@ const BlogPostSchema = (sequelize, DataTypes) => {
   const BlogPostTable = sequelize.define('BlogPost', {
     id: {
       allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER,
     },

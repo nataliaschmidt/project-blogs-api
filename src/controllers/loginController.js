@@ -16,10 +16,11 @@ const loginUser = async (req, res) => {
     if (!foundUser || foundUser.dataValues.password !== password) {
       return res.status(400).json({ message: 'Invalid fields' });
     }
+    
+    const { password: _password, ...userWithoutPassword } = foundUser.dataValues;
 
-    const payload = { data: email };
+    const payload = { data: userWithoutPassword };
     const token = createToken(payload);
-    console.log(token);
     return res.status(200).json({ token });
   } catch (error) {
     return res.status(500).json({ message: error.message });
