@@ -1,9 +1,8 @@
 const { getPayload } = require('../auth/auth');
 
-const extractToken = (bearerToken) => {
-  const token = bearerToken.split(' ')[1];
-  return token;
-};
+const extractToken = (bearerToken) => (bearerToken
+  .includes(' ') ? bearerToken
+  .split(' ')[1] : bearerToken);
 
 const validateJwt = (req, res, next) => {
   const bearerToken = req.header('Authorization');

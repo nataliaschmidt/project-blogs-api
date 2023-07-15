@@ -13,6 +13,7 @@ app.use(express.json());
 
 app.use('/login', routes.loginRoutes);
 app.use('/user', routes.userRoutes);
+app.use('/categories', routes.categoriesRoutes);
 // ...
 
 // É importante exportar a constante `app`,
