@@ -2,6 +2,15 @@ const { createToken } = require('../auth/auth');
 const { userService } = require('../services');
 const mapStatusHTTP = require('../utils/mapStatusHTTP');
 
+const findAllUser = async (req, res) => {
+try {
+  const { status, data } = await userService.findAllUser();
+  return res.status(mapStatusHTTP(status)).json(data);
+} catch (error) {
+  return res.status(500).json({ message: error.message });
+}
+};
+
 const createUser = async (req, res) => {
   try {
     const userInfo = req.body;
@@ -22,5 +31,6 @@ const createUser = async (req, res) => {
 };
 
 module.exports = {
+  findAllUser,
   createUser,
 };

@@ -3,6 +3,16 @@ const { validateNewUser } = require('./validations/validationsInputValues');
 
 const getByUserEmail = (email) => User.findOne({ where: { email } });
 
+const findAllUser = async () => {
+const users = await User.findAll({
+  attributes: { exclude: ['password'] },
+ });
+return {
+  status: 'SUCCESSFUL',
+  data: users,
+};
+};
+
 const createUser = async ({ displayName, email, password, image }) => {
 const error = validateNewUser({ displayName, email, password, image });
 
@@ -29,4 +39,5 @@ if (isEmailExist) {
 module.exports = {
   getByUserEmail,
   createUser,
+  findAllUser,
 };
