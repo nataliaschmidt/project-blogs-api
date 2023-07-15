@@ -3,12 +3,22 @@ const { userService } = require('../services');
 const mapStatusHTTP = require('../utils/mapStatusHTTP');
 
 const findAllUser = async (req, res) => {
-try {
-  const { status, data } = await userService.findAllUser();
-  return res.status(mapStatusHTTP(status)).json(data);
-} catch (error) {
-  return res.status(500).json({ message: error.message });
-}
+  try {
+    const { status, data } = await userService.findAllUser();
+    return res.status(mapStatusHTTP(status)).json(data);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const findUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, data } = await userService.findUserById(id);
+    return res.status(mapStatusHTTP(status)).json(data);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 const createUser = async (req, res) => {
@@ -33,4 +43,5 @@ const createUser = async (req, res) => {
 module.exports = {
   findAllUser,
   createUser,
+  findUserById,
 };

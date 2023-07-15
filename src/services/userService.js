@@ -4,29 +4,36 @@ const { validateNewUser } = require('./validations/validationsInputValues');
 const getByUserEmail = (email) => User.findOne({ where: { email } });
 
 const findAllUser = async () => {
-const users = await User.findAll({
-  attributes: { exclude: ['password'] },
- });
-return {
-  status: 'SUCCESSFUL',
-  data: users,
+  const users = await User.findAll({ attributes: { exclude: ['password'] } });
+  return { status: 'SUCCESSFUL', data: users };
 };
+
+const findUserById = async (id) => {
+  const user = await User.findByPk(id, {
+    attributes: { exclude: ['password'] },
+  });
+
+  if (!user) {
+    return { status: 'NOT_FOUND', data: { message: 'User does not exist' } };
+  }
+
+  return { status: 'SUCCESSFUL', data: user };
 };
 
 const createUser = async ({ displayName, email, password, image }) => {
-const error = validateNewUser({ displayName, email, password, image });
+  const error = validateNewUser({ displayName, email, password, image });
 
-if (error) {
-  return {
-    status: error.status,
-    data: { message: error.message },
-  };
-}
+  if (error) {
+    return {
+      status: error.status,
+      data: { message: error.message },
+    };
+  }
 
-const isEmailExist = await getByUserEmail(email);
-if (isEmailExist) {
-  return { status: 'CONFLICT', data: { message: 'User already registered' } };
-}
+  const isEmailExist = await getByUserEmail(email);
+  if (isEmailExist) {
+    return { status: 'CONFLICT', data: { message: 'User already registered' } };
+  }
 
   const createdUser = await User.create({ displayName, email, password, image });
 
@@ -38,6 +45,7 @@ if (isEmailExist) {
 
 module.exports = {
   getByUserEmail,
-  createUser,
   findAllUser,
+  findUserById,
+  createUser,
 };
