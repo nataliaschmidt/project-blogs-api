@@ -12,6 +12,16 @@ const createPost = async (req, res) => {
   }
 };
 
+const findAllPosts = async (req, res) => {
+  try {
+    const { status, data } = await postService.findAllPosts();
+    res.status(mapStatusHTTP(status)).json(data);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createPost,
+  findAllPosts,
 };

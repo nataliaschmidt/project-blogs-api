@@ -1,4 +1,4 @@
-const { BlogPost, Category } = require('../models');
+const { BlogPost, Category, User } = require('../models');
 
 const isCategoryValidate = async (categoryIds) => {
   const isCategoryExistPromise = categoryIds.map((catId) => Category.findByPk(catId));
@@ -18,20 +18,41 @@ const validateFieldsPost = (title, content, categoryIds) => {
 
 const createPost = async (title, content, categoryIds, userId) => {
   const isNotvalidateFields = validateFieldsPost(title, content, categoryIds);
-  if (isNotvalidateFields) { return isNotvalidateFields; }
+  if (isNotvalidateFields) return isNotvalidateFields;
 
   const isCategoryNotExist = await isCategoryValidate(categoryIds);
-  if (isCategoryNotExist) { return isCategoryNotExist; }
-  
-      const newPost = await BlogPost.create(
-        { title, content, userId, published: new Date(), updated: new Date() },
-      );
-      await newPost.setCategories(categoryIds);
-      return { status: 'CREATED', data: newPost };
+  if (isCategoryNotExist) return isCategoryNotExist;
+
+  const newPost = await BlogPost.create(
+    { title, content, userId, published: new Date(), updated: new Date() },
+  );
+
+  await newPost.setCategories(categoryIds);
+
+  return { status: 'CREATED', data: newPost };
+};
+
+const findAllPosts = async () => {
+  const posts = await BlogPost.findAll({
+    include: [
+      { model: User, as: 'user', attributes: { exclude: 'password' } },
+      {
+        model: Category,
+        as: 'categories',
+        through: { attributes: { exclude: ['postId', 'categoryId'] } },
+      },
+    ],
+  });
+
+  return {
+    status: 'SUCCESSFUL',
+    data: posts,
+  };
 };
 
 module.exports = {
   createPost,
+  findAllPosts,
 };
 
 // try {
