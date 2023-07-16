@@ -51,29 +51,50 @@ const findAllPosts = async () => {
 };
 
 const findPostById = async (id) => {
-const post = await BlogPost.findByPk(id, {
-  include: [
-    { model: User, as: 'user', attributes: { exclude: 'password' } },
-    {
-      model: Category,
-      as: 'categories',
-      through: { attributes: { exclude: ['postId', 'categoryId'] } },
-    },
-  ],
-});
+  const post = await BlogPost.findByPk(id, {
+    include: [
+      { model: User, as: 'user', attributes: { exclude: 'password' } },
+      {
+        model: Category,
+        as: 'categories',
+        through: { attributes: { exclude: ['postId', 'categoryId'] } },
+      },
+    ],
+  });
 
-if (!post) {
-  return { status: 'NOT_FOUND', data: { message: 'Post does not exist' },
-  };
-}
+  if (!post) {
+    return {
+      status: 'NOT_FOUND', data: { message: 'Post does not exist' },
+    };
+  }
 
-return { status: 'SUCCESSFUL', data: post };
+  return { status: 'SUCCESSFUL', data: post };
+};
+
+const updatePost = async (id, title, content, userId) => {
+  if (!title || !content) {
+    return { status: 'INVALID_VALUE', data: { message: 'Some required fields are missing' } };
+  }
+
+  console.log('id', id);
+  console.log('userId', id);
+
+  if (Number(userId) === Number(id)) {
+    await BlogPost.update(
+      { title, content, updated: new Date() },
+      { where: { id } },
+    );
+    const post = await findPostById(id);
+    return { status: 'SUCCESSFUL', data: post.data };
+  }
+  return { status: 'UNAUTHORIZED', data: { message: 'Unauthorized user' } };
 };
 
 module.exports = {
   createPost,
   findAllPosts,
   findPostById,
+  updatePost,
 };
 
 // try {

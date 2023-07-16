@@ -5,5 +5,6 @@ const validateJwt = require('../middleware/validateJWT');
 postRouter.get('/', validateJwt, postController.findAllPosts);
 postRouter.get('/:id', validateJwt, postController.findPostById);
 postRouter.post('/', validateJwt, postController.createPost);
+postRouter.put('/:id', validateJwt, postController.updatePost);
 
 module.exports = postRouter;

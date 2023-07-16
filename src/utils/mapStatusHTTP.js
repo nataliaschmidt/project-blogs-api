@@ -5,6 +5,7 @@ const httpStatus = {
   CONFLICT: 409,
   INVALID_VALUE: 400,
   DELETED: 204,
+  UNAUTHORIZED: 401,
 };
 
 const mapStatusHTTP = (status) => httpStatus[status] || 500;
