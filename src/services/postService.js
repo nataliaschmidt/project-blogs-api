@@ -87,25 +87,37 @@ const updatePost = async (id, title, content, userId) => {
   return { status: 'UNAUTHORIZED', data: { message: 'Unauthorized user' } };
 };
 
+const deletePost = async (id, userId) => {
+  const post = await findPostById(id);
+
+  if (post.status === 'NOT_FOUND') {
+   return post;
+  }
+
+  const userIdPost = post.data.dataValues.userId;
+
+  if (Number(userIdPost) === Number(userId)) {
+    await BlogPost.destroy({ where: { id } });
+    return { status: 'DELETED' };
+  } 
+  return { status: 'UNAUTHORIZED', data: { message: 'Unauthorized user' } };
+};
+
 module.exports = {
   createPost,
   findAllPosts,
   findPostById,
   updatePost,
+  deletePost,
 };
 
-// try {
-//   const result = await sequelize.transaction(async (t) => {
-//     const newPost = await BlogPost.create(
-//       { title, content, userId, published: new Date(), updated: new Date() },
-//       { transaction: t },
-//     );
-//     await newPost.setCategories(categoryIds);
-//     return { status: 'CREATED', data: newPost };
-//   });
+// const result = await sequelize.transaction(async (t) => {
+//   const newPost = await BlogPost.create(
+//     { title, content, userId, published: new Date(), updated: new Date() },
+//     { transaction: t },
+//   );
+//   await newPost.setCategories(categoryIds);
+//   return { status: 'CREATED', data: newPost };
+// });
 
-//   return result;
-// } catch (error) {
-//   console.log('CAI NO ERRO', error);
-//   throw error;
-// }
+// return result;
