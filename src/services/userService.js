@@ -44,7 +44,6 @@ const createUser = async ({ displayName, email, password, image }) => {
 };
 
 const deleteUser = async (userId) => {
-  console.log('USERID', userId);
 const userDeleted = await User.destroy({ where: { id: userId } });
 
 if (userDeleted !== 0) {

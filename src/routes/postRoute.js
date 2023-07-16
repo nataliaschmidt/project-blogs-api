@@ -2,6 +2,7 @@ const postRouter = require('express').Router();
 const { postController } = require('../controllers');
 const validateJwt = require('../middleware/validateJWT');
 
+postRouter.get('/search', validateJwt, postController.findByQueryParams);
 postRouter.get('/', validateJwt, postController.findAllPosts);
 postRouter.get('/:id', validateJwt, postController.findPostById);
 postRouter.post('/', validateJwt, postController.createPost);

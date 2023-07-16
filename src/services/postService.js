@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { BlogPost, Category, User } = require('../models');
 
 const isCategoryValidate = async (categoryIds) => {
@@ -103,12 +104,36 @@ const deletePost = async (id, userId) => {
   return { status: 'UNAUTHORIZED', data: { message: 'Unauthorized user' } };
 };
 
+const findByQueryParams = async (q) => {
+  const findPost = await BlogPost.findAll({
+    where: {
+      [Op.or]: [{ title: { [Op.like]: `%${q}%` } },
+      { content: { [Op.like]: `%${q}%` } }],
+    },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: 'password' } },
+      {
+        model: Category,
+        as: 'categories',
+        through: { attributes: { exclude: ['postId', 'categoryId'] } },
+      },
+    ] });
+
+  if (findPost.length === 0) {
+    return { status: 'SUCCESSFUL', data: findPost };
+  }
+
+  const posts = findPost.map((post) => post.dataValues);
+  return { status: 'SUCCESSFUL', data: posts };
+};
+
 module.exports = {
   createPost,
   findAllPosts,
   findPostById,
   updatePost,
   deletePost,
+  findByQueryParams,
 };
 
 // const result = await sequelize.transaction(async (t) => {

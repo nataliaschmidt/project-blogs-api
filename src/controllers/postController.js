@@ -54,10 +54,21 @@ const deletePost = async (req, res) => {
   }
 };
 
+const findByQueryParams = async (req, res) => {
+  try {
+    const { q } = req.query;
+    const { status, data } = await postService.findByQueryParams(q);
+    res.status(mapStatusHTTP(status)).json(data);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createPost,
   findAllPosts,
   findPostById,
   updatePost,
   deletePost,
+  findByQueryParams,
 };
