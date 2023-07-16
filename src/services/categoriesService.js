@@ -3,7 +3,7 @@ const { validateNameCategory } = require('./validations/validationsInputValues')
 
 const createCategory = async (name) => {
   const error = validateNameCategory(name);
-console.log(error);
+  
   if (error) {
     return {
       status: error.status,
