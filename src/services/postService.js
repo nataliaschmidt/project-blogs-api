@@ -91,7 +91,7 @@ const deletePost = async (id, userId) => {
   const post = await findPostById(id);
 
   if (post.status === 'NOT_FOUND') {
-   return post;
+    return post;
   }
 
   const userIdPost = post.data.dataValues.userId;
@@ -99,7 +99,7 @@ const deletePost = async (id, userId) => {
   if (Number(userIdPost) === Number(userId)) {
     await BlogPost.destroy({ where: { id } });
     return { status: 'DELETED' };
-  } 
+  }
   return { status: 'UNAUTHORIZED', data: { message: 'Unauthorized user' } };
 };
 

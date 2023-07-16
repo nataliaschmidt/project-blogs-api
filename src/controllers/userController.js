@@ -40,8 +40,19 @@ const createUser = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const userId = req.payload.data.id;
+    const { status, data } = await userService.deleteUser(userId);
+    return res.status(mapStatusHTTP(status)).json(data);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   findAllUser,
   createUser,
   findUserById,
+  deleteUser,
 };

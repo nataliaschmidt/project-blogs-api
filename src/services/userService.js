@@ -43,9 +43,20 @@ const createUser = async ({ displayName, email, password, image }) => {
   };
 };
 
+const deleteUser = async (userId) => {
+  console.log('USERID', userId);
+const userDeleted = await User.destroy({ where: { id: userId } });
+
+if (userDeleted !== 0) {
+  return { status: 'DELETED' };
+} 
+return { status: 'UNAUTHORIZED', data: { message: 'Unauthorized user' } };
+};
+
 module.exports = {
   getByUserEmail,
   findAllUser,
   findUserById,
   createUser,
+  deleteUser,
 };
