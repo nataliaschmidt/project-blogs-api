@@ -76,9 +76,6 @@ const updatePost = async (id, title, content, userId) => {
     return { status: 'INVALID_VALUE', data: { message: 'Some required fields are missing' } };
   }
 
-  console.log('id', id);
-  console.log('userId', id);
-
   if (Number(userId) === Number(id)) {
     await BlogPost.update(
       { title, content, updated: new Date() },
