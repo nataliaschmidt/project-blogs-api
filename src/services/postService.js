@@ -29,7 +29,7 @@ const createPost = async (title, content, categoryIds, userId) => {
     { title, content, userId, published: new Date(), updated: new Date() },
     { transaction: t },
   );
-  await newPost.setCategories(categoryIds,  { transaction: t });
+  await newPost.setCategories(categoryIds, { transaction: t });
   return { status: 'CREATED', data: newPost };
 });
 return result;
@@ -149,4 +149,4 @@ module.exports = {
 
 // return result;
 
-//ACALHANDO O CODIGO DAQUI
+// ACALHANDO O CODIGO DAQUI
