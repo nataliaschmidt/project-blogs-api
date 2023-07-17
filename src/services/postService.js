@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { BlogPost, Category, User } = require('../models');
+const { BlogPost, Category, User, sequelize } = require('../models');
 
 const isCategoryValidate = async (categoryIds) => {
   const isCategoryExistPromise = categoryIds.map((catId) => Category.findByPk(catId));
@@ -24,13 +24,15 @@ const createPost = async (title, content, categoryIds, userId) => {
   const isCategoryNotExist = await isCategoryValidate(categoryIds);
   if (isCategoryNotExist) return isCategoryNotExist;
 
+  const result = await sequelize.transaction(async (t) => {
   const newPost = await BlogPost.create(
     { title, content, userId, published: new Date(), updated: new Date() },
+    { transaction: t },
   );
-
-  await newPost.setCategories(categoryIds);
-
+  await newPost.setCategories(categoryIds,  { transaction: t });
   return { status: 'CREATED', data: newPost };
+});
+return result;
 };
 
 const findAllPosts = async () => {
@@ -146,3 +148,5 @@ module.exports = {
 // });
 
 // return result;
+
+//ACALHANDO O CODIGO DAQUI
